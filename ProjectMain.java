@@ -64,14 +64,17 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		boolean moving = false;
 		if (keyPressedList[0]) {
-			player.setLocation(player.getX() - 2, player.getY());
-
-			
+			player.setXVelocity(player.getXVelocity() - 1);
+			moving = true;
 		}
-		if (keyPressedList[1]) {
-			player.setLocation(player.getX() + 2, player.getY());
-			player.jump();
+		else if (keyPressedList[1]) {
+			player.setXVelocity(player.getXVelocity() + 1);
+			moving = true;
+		}
+		else {
+			player.decelerate(1, 0);
 		}
 		player.update();
 	}
