@@ -57,7 +57,7 @@ public class Player extends JPanel {
 	}
 	
 	public void accelerate(double x, double y) {
-		if (!(xVelocity > MAX_VELOCITY)) {
+		if (!(Math.abs(xVelocity) > Math.abs(MAX_VELOCITY))) {
 			xVelocity += x;
 		}
 		if (!(yVelocity > TERMINAL_VELOCITY)) {
