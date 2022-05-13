@@ -11,14 +11,16 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 	private Timer t = new Timer(30, this);
 	private Player player;
 	private boolean[] keyPressedList = {false, false, false};
-	
+	private Timer tenFrame;
 	public ProjectMain() {
 		setBounds(100, 100, 1000, 500);
 		setLayout(null);
 		
 		
+		player = new Player(100, 100);
+		Platform platform = new Platform(200, 100);
 		
-		player = new Player(200, 200);
+		add(platform);
 		add(player);
 		t.start();
 		addKeyListener(this);
@@ -64,17 +66,14 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		boolean moving = false;
 		if (keyPressedList[0]) {
-			player.setXVelocity(player.getXVelocity() - 1);
-			moving = true;
+			player.accelerate(-3, 0);
 		}
 		else if (keyPressedList[1]) {
-			player.setXVelocity(player.getXVelocity() + 1);
-			moving = true;
+			player.accelerate(3, 0);
 		}
 		else {
-			player.decelerate(1, 0);
+			player.decelerate(3, 0);
 		}
 		player.update();
 	}
