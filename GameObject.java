@@ -14,6 +14,8 @@ public class GameObject extends JPanel{
 	private Rectangle hitbox;
 	private BufferedImage img;
 	private JLabel imageLabel;
+	private boolean collides; //if true, collisions apply, if false, collisions do not apply
+	
 	
 	public GameObject() {
 		dx = 0;
@@ -28,6 +30,7 @@ public class GameObject extends JPanel{
 		setSize(width, height);
 		setLocation(x, y);
 		hitbox = new Rectangle(0, 0, width, height);
+		collides = true;
 		try {
 			File test = new File(imgSrc);
 			img = ImageIO.read(test);
@@ -55,7 +58,24 @@ public class GameObject extends JPanel{
 	public void setdy(double val) {
 		dy = val;
 	}
+	public Rectangle getHitbox() {
+		return hitbox;
+	}
+	public boolean hasCollisions() {
+		return collides;
+	}
 	
+	public boolean isColliding(GameObject obj1) {
+		if (obj1.hasCollisions() && collides) {
+			if (obj1.getHitbox().intersects(hitbox)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
+	public void scroll() {
+		setLocation(getX() + 2, getY());
+	}
 
 }
