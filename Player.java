@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-public class Player extends JPanel {
+public class Player extends GameObject{
 	private Rectangle hitbox;
 	private JLabel picLabel;
 	private BufferedImage myPicture;
@@ -16,48 +16,33 @@ public class Player extends JPanel {
 	private final int MAX_VELOCITY = 10;
 	private final int TERMINAL_VELOCITY = 10;
 	public Player(int x, int y) {
-		setLocation(x, y);
-		setSize(100, 100);
-		try {
-			File test = new File("src/test.png");
-			myPicture = ImageIO.read(test);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Help");
-			myPicture = null;
-		}
-		picLabel = new JLabel(new ImageIcon(myPicture));
-		picLabel.setPreferredSize(new Dimension(100, 100));
-		add(picLabel);
-		insets = this.getInsets();
-		hitbox = new Rectangle(0, 0, 100, 100);
+		super(x, y, 100, 100, "src/test.png");
+		insets = getInsets();
 		
 	}
 	public void jump() {
 		if (airborne) {
-			return;
+			//return;
 		}
-		yVelocity = 20;
+		yVelocity = -20;
 	}
 	public void update() {
-		if (getY() + getHeight() > getParent().getHeight() - insets.bottom - yVelocity) {
-			airborne = false;
-		}
-		else {
-			airborne = true;
-		}
 		if (airborne) {
-			yVelocity = 10;
+			yVelocity += 1;
 		}
 		else {
 			yVelocity = 0;
 		}
+		//if not colliding on thet bottom with any blocks 
+		//if () {
+			//airborne = false;
+		//}
+
 		setLocation(getX() + (int)xVelocity, getY() + (int)(yVelocity));
 	}
 	
 	public void accelerate(double x, double y) {
-		if (!(Math.abs(xVelocity) > Math.abs(MAX_VELOCITY))) {
+		if ((Math.abs(xVelocity) <= Math.abs(MAX_VELOCITY))) {
 			xVelocity += x;
 		}
 		if (!(yVelocity > TERMINAL_VELOCITY)) {
@@ -76,7 +61,7 @@ public class Player extends JPanel {
 			yVelocity -= x;
 		}
 		else {
-			yVelocity = 0;
+			//yVelocity = 0;
 		}
 	}
 	public double getXVelocity() {
