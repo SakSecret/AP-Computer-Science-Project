@@ -15,9 +15,29 @@ public class Player extends GameObject{
 	private Insets insets;
 	private final int MAX_VELOCITY = 10;
 	private final int TERMINAL_VELOCITY = 10;
+	private static ImageIcon[] sprites;
+	
+	
+	
 	public Player(int x, int y) {
 		super(x, y, 100, 100, "src/test.png");
 		insets = getInsets();
+		
+		if (sprites == null) {
+			String[] imagePaths = {"src/mario/rest.png", "src/mario/run.png"};
+			sprites = new ImageIcon[imagePaths.length];
+			for (int i = 0; i < imagePaths.length; i++) {
+				try {
+					File test = new File(imagePaths[i]);
+					sprites[i] = new ImageIcon(ImageIO.read(test));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					System.out.println("Help");
+				}
+			}
+		}
+		
 		
 	}
 	public void jump() {
@@ -37,7 +57,14 @@ public class Player extends GameObject{
 		//if () {
 			//airborne = false;
 		//}
-
+		if (sprites != null) {
+			if (xVelocity != 0) {
+				setImage(sprites[1]);
+			}
+			else {
+				setImage(sprites[0]);
+			}
+		}
 		setLocation(getX() + (int)xVelocity, getY() + (int)(yVelocity));
 	}
 	
