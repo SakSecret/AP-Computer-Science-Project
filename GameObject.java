@@ -34,12 +34,14 @@ public class GameObject extends JPanel{
 		try {
 			File test = new File(imgSrc);
 			img = ImageIO.read(test);
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("Help");
 			img = null;
 		}
+
 		imageLabel = new JLabel(new ImageIcon(img));
 		add(imageLabel);
 	}
@@ -63,6 +65,10 @@ public class GameObject extends JPanel{
 	}
 	public boolean hasCollisions() {
 		return collides;
+	}
+	
+	public void setImage(ImageIcon icon) {
+		imageLabel.setIcon(icon);
 	}
 	
 	public boolean isColliding(GameObject obj1) {
