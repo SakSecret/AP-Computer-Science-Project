@@ -15,9 +15,30 @@ public class Player extends GameObject{
 	private Insets insets;
 	private final int MAX_VELOCITY = 10;
 	private final int TERMINAL_VELOCITY = 10;
+	private static ImageIcon[] sprites;
+	private int runFrame = 0;
+	private boolean decelerating = false;
+	
+	
 	public Player(int x, int y) {
 		super(x, y, 100, 100, "src/test.png");
 		insets = getInsets();
+		
+		if (sprites == null) {
+			String[] imagePaths = {"src/mario/rest.png", "src/mario/run_01.png", "src/mario/run_02.png", "src/mario/run_03.png", "src/mario/stopping.png"};
+			sprites = new ImageIcon[imagePaths.length];
+			for (int i = 0; i < imagePaths.length; i++) {
+				try {
+					File test = new File(imagePaths[i]);
+					sprites[i] = new ImageIcon(ImageIO.read(test));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					System.out.println("Help");
+				}
+			}
+		}
+		
 		
 	}
 	public void jump() {
@@ -37,7 +58,35 @@ public class Player extends GameObject{
 		//if () {
 			//airborne = false;
 		//}
-
+		if (sprites != null) {
+			if (xVelocity != 0) {
+				if (decelerating) {
+					runFrame = 0;
+					setImage(sprites[4]);
+					
+				}
+				else {
+					if (runFrame == 4) {
+						setImage(sprites[1]);
+						runFrame++;
+					}
+					else if (runFrame == 8) {
+						setImage(sprites[2]);
+						runFrame++;
+					}
+					else if (runFrame == 12) {
+						setImage(sprites[3]);
+						runFrame = 0;
+					}
+					else {
+						runFrame++;
+					}
+				}
+			}
+			else {
+				setImage(sprites[0]);
+			}
+		}
 		setLocation(getX() + (int)xVelocity, getY() + (int)(yVelocity));
 	}
 	
@@ -48,10 +97,11 @@ public class Player extends GameObject{
 		if (!(yVelocity > TERMINAL_VELOCITY)) {
 			yVelocity += y;
 		}
+		decelerating = false;
 	}
 	
 	public void decelerate(double x, double y) {
-		if (!(xVelocity < x)) {
+		if (!(Math.abs(xVelocity) < x) && Math.abs(xVelocity) > 8) {
 			xVelocity -= x;
 		}
 		else {
@@ -63,6 +113,7 @@ public class Player extends GameObject{
 		else {
 			//yVelocity = 0;
 		}
+		decelerating = true;
 	}
 	public double getXVelocity() {
 		return xVelocity;
