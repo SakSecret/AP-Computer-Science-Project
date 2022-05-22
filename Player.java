@@ -16,7 +16,8 @@ public class Player extends GameObject{
 	private final int MAX_VELOCITY = 10;
 	private final int TERMINAL_VELOCITY = 10;
 	private static ImageIcon[] sprites;
-	
+	private int runFrame = 0;
+	private boolean decelerating = false;
 	
 	
 	public Player(int x, int y) {
@@ -24,7 +25,7 @@ public class Player extends GameObject{
 		insets = getInsets();
 		
 		if (sprites == null) {
-			String[] imagePaths = {"src/mario/rest.png", "src/mario/run.png"};
+			String[] imagePaths = {"src/mario/rest.png", "src/mario/run_01.png", "src/mario/run_02.png", "src/mario/run_03.png", "src/mario/stopping.png"};
 			sprites = new ImageIcon[imagePaths.length];
 			for (int i = 0; i < imagePaths.length; i++) {
 				try {
@@ -59,7 +60,28 @@ public class Player extends GameObject{
 		//}
 		if (sprites != null) {
 			if (xVelocity != 0) {
-				setImage(sprites[1]);
+				if (decelerating) {
+					runFrame = 0;
+					setImage(sprites[4]);
+					
+				}
+				else {
+					if (runFrame == 4) {
+						setImage(sprites[1]);
+						runFrame++;
+					}
+					else if (runFrame == 8) {
+						setImage(sprites[2]);
+						runFrame++;
+					}
+					else if (runFrame == 12) {
+						setImage(sprites[3]);
+						runFrame = 0;
+					}
+					else {
+						runFrame++;
+					}
+				}
 			}
 			else {
 				setImage(sprites[0]);
@@ -75,10 +97,11 @@ public class Player extends GameObject{
 		if (!(yVelocity > TERMINAL_VELOCITY)) {
 			yVelocity += y;
 		}
+		decelerating = false;
 	}
 	
 	public void decelerate(double x, double y) {
-		if (!(xVelocity < x)) {
+		if (!(Math.abs(xVelocity) < x) && Math.abs(xVelocity) > 8) {
 			xVelocity -= x;
 		}
 		else {
@@ -90,6 +113,7 @@ public class Player extends GameObject{
 		else {
 			//yVelocity = 0;
 		}
+		decelerating = true;
 	}
 	public double getXVelocity() {
 		return xVelocity;
