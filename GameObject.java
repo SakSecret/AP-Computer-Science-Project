@@ -9,18 +9,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class GameObject extends JPanel{
-	private double dx;
-	private double dy;
+	private int dx;
+	private int dy;
 	private Rectangle hitbox;
 	private BufferedImage img;
 	private JLabel imageLabel;
 	private boolean collides; //if true, collisions apply, if false, collisions do not apply
-	
+	private double xPos = super.getX();
+	private double yPos = super.getY();
 	
 	public GameObject() {
 		dx = 0;
 		dy = 0;
-		
 		hitbox = new Rectangle();
 		
 		img = null;
@@ -44,19 +44,26 @@ public class GameObject extends JPanel{
 		add(imageLabel);
 	}
 	
-	public double getdx() {
+	public int getdx() {
 		return dx;
 	}
-	public double getdy() {
+	public int getdy() {
 		return dy;
 	}
 	
-	public void setdx(double val) {
+	public void setdx(int val) {
 		dx = val;
 	}
 	
-	public void setdy(double val) {
+	public void setdy(int val) {
 		dy = val;
+	}
+	
+	public void changedx(int val) {
+		dx += val;
+	}
+	public void changedy(int val) {
+		dy += val;
 	}
 	public Rectangle getHitbox() {
 		return hitbox;
@@ -67,15 +74,17 @@ public class GameObject extends JPanel{
 	
 	public boolean isColliding(GameObject obj1) {
 		if (obj1.hasCollisions() && collides) {
-			if (obj1.getHitbox().intersects(hitbox)) {
-				return true;
-			}
+			return obj1.getHitbox().intersects(hitbox);
 		}
 		return false;
 	}
 	
-	public void scroll() {
-		setLocation(getX() + 2, getY());
+	public void scroll(int val) {
+		setLocation(getX() + val, getY());
+	}
+	
+	public void setImage(ImageIcon icon) {
+		imageLabel.setIcon(icon);
 	}
 
 }
