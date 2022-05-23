@@ -16,12 +16,17 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 	private Timer t = new Timer(20, this);
 	private Player player;
 	private Platform platform;
+	private Block block;
 	private boolean[] keyPressedList = {false, false, false};
 	private Timer tenFrame;
 	private int screenX; //x of the screen in the game world, top left
 	private int screenY; //y of the screen in the game world, top left
 	private ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	private boolean scrolling = false;
+	private int frame = 0;
+	private int cameraSide = 0; //0 means mario can move right and velocity is still, 1 means he can move left and vleocity is still
+	private int offset = 0; //offset of the screen
+	
 	public ProjectMain() {
 		setBounds(100, 100, 1000, 500);
 		setLayout(null);
@@ -32,12 +37,17 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 		scrolling = true;
 		player = new Player(100, 100);
 		platform = new Platform(200, 400);
-		
+		block = new Block(300, 300);
 		objects.add(player);
 		objects.add(platform);
+		objects.add(block);
 		
-		add(platform);
-		add(player);
+		for (GameObject o: objects) {
+			add(o);
+		}
+		
+		
+		//add(game);
 		t.start();
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -105,16 +115,43 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 			player.jump();
 		}
 		player.update();
+		//game.setLocation(game.getX() + 2, game.getY());
+
 		if (scrolling) {
-			if (player.getX() > getWidth()/2) {
-				scrolling = false;
+	//		if (player.getX() > game.getWidth()/2) {
+			//	scrolling = false;
+		//	}
+			//setLocation((int)(Math.random() * 600), (int)(Math.random() * 600));
+			int vel = player.getdx(); //limit function calls as player velocity could change during code execution
+			if (cameraSide == 1 && player.getdx() < 0) {
+				for (GameObject o: objects) {
+					o.scroll(-vel);
+				}
 			}
-			for (GameObject o: objects) {
-				o.scroll();
+			else if (cameraSide == 0 && player.getdx() > 0) {
+				for (GameObject o: objects) {
+					o.scroll(-vel);
+				}
+			}
+			offset += vel;
+			if (frame%100 == 0) {
+				platform.setLocation(player.getX() + 500, platform.getY());
 			}
 		}
+		if (player.getX() < 50) {
+			cameraSide = 1;
+			System.out.println("player less than 50");
+		}
+		else if (player.getX() > 500) {
+			cameraSide = 0;
+			System.out.println("playaer more than 950");
+		}
+		else {
+			cameraSide = -1;
+		}
 		System.out.println(player.isColliding(platform));
-
+		frame++;
+		
 	}
 	
 	public void scroll(int xVal, int yVal) { { //scrolls the screen slowly to the designated x and y
