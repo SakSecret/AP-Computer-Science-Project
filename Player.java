@@ -43,7 +43,7 @@ public class Player extends GameObject{
 			return;
 		}
 		System.out.println("actually works");
-		setLocation(getX(), getY() - 5); //quick workaround,
+		setLocation(getX(), getY() - 5); //quick workaround
 		setdy(-20);
 	}
 	public void update(ArrayList<GameObject> list) {
@@ -52,6 +52,10 @@ public class Player extends GameObject{
 			if (isColliding(list.get(i)) && !list.get(i).equals(this)) {
 				setdy(0);
 				airborne = false;
+				setLocation(getX(), list.get(i).getY() - getHeight() + 1);
+				if (list.get(i).stomp() != 0) {
+					setdy(-10);
+				}
 				break;
 			}
 		}
