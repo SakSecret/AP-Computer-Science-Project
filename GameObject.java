@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 
 import javax.imageio.ImageIO;
@@ -20,6 +21,7 @@ public class GameObject extends JPanel{
 	private boolean collides; //if true, collisions apply, if false, collisions do not apply
 	private double xPos = super.getX();
 	private double yPos = super.getY();
+	private boolean clearNextImage = false;
 	
 	public GameObject() {
 		dx = 0;
@@ -78,6 +80,9 @@ public class GameObject extends JPanel{
 	public boolean hasCollisions() {
 		return collides;
 	}
+	public void setCollisions(boolean val) {
+		collides = val;
+	}
 	
 	public boolean isColliding(GameObject obj1) {
 		if (obj1.hasCollisions() && collides) {
@@ -90,13 +95,21 @@ public class GameObject extends JPanel{
 		setLocation(getX() + val, getY());
 	}
 	
-	public void setImage(ImageIcon icon) {
-		//imageLabel.setIcon(icon);
+	public void setImage(BufferedImage icon) {
+		img = icon;
+		clearNextImage = true;
+	}
+	public int stomp() {
+		return 0;
 	}
 	
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
+		if (clearNextImage) {
+			g2.clearRect(0, 0, getWidth(), getHeight());
+			clearNextImage = false;
+		}
 		g2.drawImage(img, 0, 0, null);
 	}
-
+	
 }
