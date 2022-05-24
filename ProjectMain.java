@@ -45,7 +45,7 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 		//block = new Block(300, 300);
 		objects.add(player);
 		objects.add(platform);
-		objects.add(new Platform(300, 100));
+		objects.add(new Platform(100, 400));
 		//objects.add(block);
 		
 		for (GameObject o: objects) {
@@ -117,10 +117,11 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 		if (!moving) {
 			player.decelerate(3, 0);
 		}
+
+		player.update(objects);
 		if (keyPressedList[2]) {
 			player.jump();
 		}
-		player.update();
 		//game.setLocation(game.getX() + 2, game.getY());
 
 		if (scrolling) {
@@ -140,8 +141,8 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 				}
 			}
 			offset += vel;
-			if (frame%100 == 0) {
-				platform.setLocation(player.getX() + 500, platform.getY());
+			if (frame%1 == 0) {
+				platform.setLocation(player.getX(), platform.getY());
 			}
 		}
 		if (player.getX() < 50) {
@@ -155,8 +156,8 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 		else {
 			cameraSide = -1;
 		}
-		System.out.println(player.isColliding(platform));
-		System.out.println(player.getHitbox().intersects(platform.getHitbox()));
+		System.out.println(player.getHitbox().intersects(objects.get(2).getHitbox()));
+		
 		frame++;
 		
 	}
