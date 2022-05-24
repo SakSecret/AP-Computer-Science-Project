@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 public class Player extends GameObject{
 	private Rectangle hitbox;
 	private JLabel picLabel;
@@ -39,17 +40,26 @@ public class Player extends GameObject{
 	}
 	public void jump() {
 		if (airborne) {
-			//return;
+			return;
 		}
-		changedy(-20);
+		System.out.println("actually works");
+		setLocation(getX(), getY() - 5); //quick workaround,
+		setdy(-20);
 	}
-	public void update() {
+	public void update(ArrayList<GameObject> list) {
+		airborne = true;
+		for (int i = 0; i < list.size(); i++) {
+			if (isColliding(list.get(i)) && !list.get(i).equals(this)) {
+				setdy(0);
+				airborne = false;
+				break;
+			}
+		}
 		if (airborne) {
-			changedy(-1);
+			changedy(1);
 		}
-		else {
-			setdy(0);
-		}
+
+
 		//if not colliding on thet bottom with any blocks 
 		//if () {
 			//airborne = false;
@@ -84,7 +94,7 @@ public class Player extends GameObject{
 			}
 		}
 		setLocation(getX() + getdx(), getY() + getdy());
-		
+		System.out.println(getdy());
 	}
 	
 	public void accelerate(int x, int y) {
@@ -114,6 +124,7 @@ public class Player extends GameObject{
 		Graphics2D g2 = (Graphics2D)g;
 		g2.drawImage(sprites[imgIndex], 0, 0, null);
 	}
+	
 	
 	
 }
