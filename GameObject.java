@@ -2,6 +2,8 @@ import javax.swing.JPanel;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import javax.imageio.ImageIO;
@@ -13,7 +15,7 @@ public class GameObject extends JPanel{
 	private int dy;
 	private Rectangle hitbox;
 	private BufferedImage img;
-	private JLabel imageLabel;
+	//private JLabel imageLabel;
 	private boolean collides; //if true, collisions apply, if false, collisions do not apply
 	private double xPos = super.getX();
 	private double yPos = super.getY();
@@ -40,8 +42,8 @@ public class GameObject extends JPanel{
 			System.out.println("Help");
 			img = null;
 		}
-		imageLabel = new JLabel(new ImageIcon(img));
-		add(imageLabel);
+		//imageLabel = new JLabel(new ImageIcon(img));
+		//add(imageLabel);
 	}
 	
 	public int getdx() {
@@ -66,7 +68,7 @@ public class GameObject extends JPanel{
 		dy += val;
 	}
 	public Rectangle getHitbox() {
-		return hitbox;
+		return new Rectangle(getX(), getY(), getWidth(), getHeight());
 	}
 	public boolean hasCollisions() {
 		return collides;
@@ -74,7 +76,7 @@ public class GameObject extends JPanel{
 	
 	public boolean isColliding(GameObject obj1) {
 		if (obj1.hasCollisions() && collides) {
-			return obj1.getHitbox().intersects(hitbox);
+			return obj1.getHitbox().intersects(this.getHitbox());
 		}
 		return false;
 	}
@@ -84,7 +86,12 @@ public class GameObject extends JPanel{
 	}
 	
 	public void setImage(ImageIcon icon) {
-		imageLabel.setIcon(icon);
+		//imageLabel.setIcon(icon);
+	}
+	
+	public void paint(Graphics g) {
+		Graphics2D g2 = (Graphics2D)g;
+		g2.drawImage(img, 0, 0, null);
 	}
 
 }
