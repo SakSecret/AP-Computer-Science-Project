@@ -12,11 +12,8 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 
 	//To Do:
 	//add a thing that infrequently(every 200 millisec maybe?) removes objects that are out of the game window
-	/**
+	/**　if the average computer can't handle loading every single object in the level, either add sections of the level that load or find a way to check if an object should be in a location.
 	 * 
-	 * How to fix issue of hitboxes
-	 * The issue is that the intersects() method does not know relative, so it thinks all hitboxes
-	 * originate on the origin of the same plane, so fin da way to implement the absolute 
 	 */
 	private Timer t = new Timer(20, this);
 	private Player player;
@@ -31,6 +28,7 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 	private int frame = 0;
 	private int cameraSide = 0; //0 means mario can move right and velocity is still, 1 means he can move left and vleocity is still
 	private int offset = 0; //offset of the screen
+	private JLabel gameOverScreen = new JLabel("Game Over");
 	
 	public ProjectMain() {
 		setBounds(100, 100, 1000, 500);
@@ -46,6 +44,11 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 		objects.add(player);
 		objects.add(platform);
 		objects.add(new Platform(100, 400));
+		objects.add(new Goomba(400, 300));
+		gameOverScreen.setBounds(100, 100, 800, 600);
+		gameOverScreen.setFont(new Font("Serif", Font. BOLD, 200));
+		gameOverScreen.setVisible(false);
+		add(gameOverScreen);
 		//objects.add(block);
 		
 		for (GameObject o: objects) {
@@ -104,7 +107,7 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		// TODO reorder the actionPerformed loop later, I don't want to think about it now
 		boolean moving = false;
 		if (keyPressedList[0]) {
 			player.accelerate(-3, 0);
@@ -118,7 +121,7 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 			player.decelerate(3, 0);
 		}
 
-		player.update(objects);
+		//player.update(objects);
 		if (keyPressedList[2]) {
 			player.jump();
 		}
@@ -141,7 +144,7 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 				}
 			}
 			offset += vel;
-			if (frame%1 == 0) {
+			if (frame%102 == 0) {
 				platform.setLocation(player.getX(), platform.getY());
 			}
 		}
@@ -157,7 +160,21 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 			cameraSide = -1;
 		}
 		System.out.println(player.getHitbox().intersects(objects.get(2).getHitbox()));
+		if (frame%1 == 0) {
+			if (player.getY() > 1000) {
+				gameOverScreen.setVisible(true);
+			}
+			for (int i = 0; i < objects.size(); i++) { //wtf is this idk, remove later if causes problems
+				if (!objects.get(i).isVisible() && objects.get(i) instanceof Enemy) {
+					objects.remove(i);
+					i--; //if something goes wrong, check this
+				}
+			}
+		}
 		
+		for (GameObject o: objects) { //remove this if causes problems
+			o.update(objects);
+		}
 		frame++;
 		
 	}
