@@ -14,24 +14,26 @@ public class Player extends GameObject{
 	private final int MAX_VELOCITY = 10;
 	private final int TERMINAL_VELOCITY = 10;
 	private int runFrame = 0;
-	private ImageIcon[] sprites;
+	private BufferedImage[] sprites;
 	private boolean decelerating = false;
+	private int imgIndex = 0; //index of the sprite to be drawn
 	public Player(int x, int y) {
 		super(x, y, 100, 100, "src/test.png");
 		insets = getInsets();
 		if (sprites == null) {
 			String[] imagePaths = {"src/mario/rest.png", "src/mario/run_01.png", "src/mario/run_02.png", "src/mario/run_03.png", "src/mario/stopping.png"};
-			sprites = new ImageIcon[imagePaths.length];
+			sprites = new BufferedImage[imagePaths.length];
 			for (int i = 0; i < imagePaths.length; i++) {
 				try {
 					File test = new File(imagePaths[i]);
-					sprites[i] = new ImageIcon(ImageIO.read(test));
+					sprites[i] = ImageIO.read(test);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					System.out.println("Help");
 				}
 			}
+			
 		}
 		
 	}
@@ -56,20 +58,20 @@ public class Player extends GameObject{
 			if (getdx() != 0) {
 				if (decelerating) {
 					runFrame = 0;
-					setImage(sprites[4]);
+					imgIndex = 4;
 					
 				}
 				else {
 					if (runFrame == 4) {
-						setImage(sprites[1]);
+						imgIndex = 1;
 						runFrame++;
 					}
 					else if (runFrame == 8) {
-						setImage(sprites[2]);
+						imgIndex = 2;
 						runFrame++;
 					}
 					else if (runFrame == 12) {
-						setImage(sprites[3]);
+						imgIndex = 3;
 						runFrame = 0;
 					}
 					else {
@@ -78,10 +80,11 @@ public class Player extends GameObject{
 				}
 			}
 			else {
-				setImage(sprites[0]);
+				imgIndex = 0;
 			}
 		}
 		setLocation(getX() + getdx(), getY() + getdy());
+		
 	}
 	
 	public void accelerate(int x, int y) {
@@ -107,7 +110,10 @@ public class Player extends GameObject{
 			//yVelocity = 0;
 		}
 	}
+	public void paint(Graphics g) {
+		Graphics2D g2 = (Graphics2D)g;
+		g2.drawImage(sprites[imgIndex], 0, 0, null);
+	}
 	
 	
-	
-};
+}
