@@ -2,6 +2,7 @@ import javax.swing.JPanel;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -46,6 +47,10 @@ public class GameObject extends JPanel{
 		//add(imageLabel);
 	}
 	
+	public void update(ArrayList<GameObject> list) {
+		return;
+	}
+	
 	public int getdx() {
 		return dx;
 	}
@@ -68,7 +73,7 @@ public class GameObject extends JPanel{
 		dy += val;
 	}
 	public Rectangle getHitbox() {
-		return new Rectangle(getX(), getY(), getWidth(), getHeight());
+		return new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
 	}
 	public boolean hasCollisions() {
 		return collides;
