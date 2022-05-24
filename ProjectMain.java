@@ -12,11 +12,16 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 
 	//To Do:
 	//add a thing that infrequently(every 200 millisec maybe?) removes objects that are out of the game window
-	
+	/**
+	 * 
+	 * How to fix issue of hitboxes
+	 * The issue is that the intersects() method does not know relative, so it thinks all hitboxes
+	 * originate on the origin of the same plane, so fin da way to implement the absolute 
+	 */
 	private Timer t = new Timer(20, this);
 	private Player player;
 	private Platform platform;
-	private Block block;
+	//private Block block;
 	private boolean[] keyPressedList = {false, false, false};
 	private Timer tenFrame;
 	private int screenX; //x of the screen in the game world, top left
@@ -37,10 +42,11 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 		scrolling = true;
 		player = new Player(100, 100);
 		platform = new Platform(200, 400);
-		block = new Block(300, 300);
+		//block = new Block(300, 300);
 		objects.add(player);
 		objects.add(platform);
-		objects.add(block);
+		objects.add(new Platform(300, 100));
+		//objects.add(block);
 		
 		for (GameObject o: objects) {
 			add(o);
@@ -150,6 +156,7 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 			cameraSide = -1;
 		}
 		System.out.println(player.isColliding(platform));
+		System.out.println(player.getHitbox().intersects(platform.getHitbox()));
 		frame++;
 		
 	}
