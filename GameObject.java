@@ -22,7 +22,6 @@ public class GameObject extends JPanel{
 	private double xPos = super.getX();
 	private double yPos = super.getY();
 	private boolean clearNextImage = false;
-	
 	public GameObject() {
 		dx = 0;
 		dy = 0;
@@ -102,7 +101,10 @@ public class GameObject extends JPanel{
 	public int stomp() {
 		return 0;
 	}
-	
+	public void markForDeletion() { //sets up to be deleted during garbage cleanup
+		setVisible(false);
+		//change a variable or something
+	}
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
 		if (clearNextImage) {
