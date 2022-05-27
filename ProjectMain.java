@@ -12,8 +12,12 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 
 	//To Do:
 	//add a thing that infrequently(every 200 millisec maybe?) removes objects that are out of the game window
-	/**　if the average computer can't handle loading every single object in the level, either add sections of the level that load or find a way to check if an object should be in a location.
+	/**ã€€if the average computer can't handle loading every single object in the level, either add sections of the level that load or find a way to check if an object should be in a location.
 	 * 
+	 * 
+	 * Useful Notes:
+	 * sometimes when changing sprites, both the old and the new sprite will be displayed, to fix this
+	 * just slightly move the new sprite, one pixel will do
 	 */
 	private Timer t = new Timer(20, this);
 	private Player player;
@@ -29,6 +33,7 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 	private int cameraSide = 0; //0 means mario can move right and velocity is still, 1 means he can move left and vleocity is still
 	private int offset = 0; //offset of the screen
 	private JLabel gameOverScreen = new JLabel("Game Over");
+	private int coins = 0;
 	
 	public ProjectMain() {
 		setBounds(100, 100, 1000, 500);
@@ -44,9 +49,14 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 		objects.add(player);
 		objects.add(platform);
 		objects.add(new Platform(100, 400));
+		for (int i = 0; i < 1000; i++) {
+			objects.add(new Platform(i*80, 400));
+			objects.add(new Coin(i*100, 200));
+		}
+		objects.add(new Platform(300, 200));
 		objects.add(new Goomba(400, 300));
-		gameOverScreen.setBounds(100, 100, 800, 600);
-		gameOverScreen.setFont(new Font("Serif", Font. BOLD, 200));
+		gameOverScreen.setBounds(0, 0, getWidth(), getHeight());
+		gameOverScreen.setFont(new Font("Serif", Font. BOLD, 80));
 		gameOverScreen.setVisible(false);
 		add(gameOverScreen);
 		//objects.add(block);
@@ -144,7 +154,7 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 				}
 			}
 			offset += vel;
-			if (frame%102 == 0) {
+			if (frame%30 == 0) {
 				platform.setLocation(player.getX(), platform.getY());
 			}
 		}
@@ -175,6 +185,7 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 		for (GameObject o: objects) { //remove this if causes problems
 			o.update(objects);
 		}
+		Coin.updateCoinFrame();
 		frame++;
 		
 	}
