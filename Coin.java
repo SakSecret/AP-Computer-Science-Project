@@ -9,10 +9,10 @@ public class Coin extends GameObject {
 	//TODO implement coin images and 
 	private static int coinFrame = 0;
 	private static BufferedImage[] sprites;
-	
+	private static int coinCount;
 	public Coin(int x, int y) {
 		super(x, y, 30, 30, "src/coin.png");
-		setCollisions(false);
+		setPhysics(false);
 		
 		if (sprites == null) {
 			String[] imagePaths = {"src/misc/coin_01.png", "src/misc/coin_02.png"};
@@ -37,12 +37,21 @@ public class Coin extends GameObject {
 		}
 		else if (coinFrame == 20) {
 			setImage(sprites[1]);
-			coinFrame = 0;
 		}
 	}
 
 	public static void updateCoinFrame() {
+		if (coinFrame == 20) {
+			coinFrame = -1;
+		}
 		coinFrame++;
+	}
+	public static void coinCollected() {
+		coinCount++;
+	}
+	
+	public static int getCoins() { 
+		return coinCount;
 	}
 	
 }
