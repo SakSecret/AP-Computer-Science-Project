@@ -22,6 +22,7 @@ public class GameObject extends JPanel{
 	private double xPos = super.getX();
 	private double yPos = super.getY();
 	private boolean clearNextImage = false;
+	private boolean hasPhysics = true;
 	public GameObject() {
 		dx = 0;
 		dy = 0;
@@ -104,6 +105,14 @@ public class GameObject extends JPanel{
 	public void markForDeletion() { //sets up to be deleted during garbage cleanup
 		setVisible(false);
 		//change a variable or something
+	}
+	
+	public boolean hasPhysics() {
+		return hasPhysics;
+	}
+	
+	public void setPhysics(boolean val) {
+		hasPhysics = val;
 	}
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
