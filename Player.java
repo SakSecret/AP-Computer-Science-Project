@@ -56,7 +56,9 @@ public class Player extends GameObject{
 				if (list.get(i).stomp() != 0) {
 					setdy(-10);
 				}
-				break;
+				if (list.get(i) instanceof Coin) {
+					list.get(i).setVisible(false);
+				}
 			}
 		}
 		if (airborne) {
@@ -111,8 +113,13 @@ public class Player extends GameObject{
 	}
 	
 	public void decelerate(int x, int y) {
-		if (!(getdx() < x)) {
-			changedx(-x);
+		if (Math.abs(getdx()) > Math.abs(x)) {
+			if (getdx() > 0) {
+				changedx(-x);
+			}
+			else {
+				changedx(x);
+			}
 		}
 		else {
 			setdx(0);
@@ -132,3 +139,4 @@ public class Player extends GameObject{
 	
 	
 }
+ 
