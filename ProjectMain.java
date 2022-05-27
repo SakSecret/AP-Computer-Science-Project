@@ -34,6 +34,7 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 	private int offset = 0; //offset of the screen
 	private JLabel gameOverScreen = new JLabel("Game Over");
 	private int coins = 0;
+	private JLabel coinCounter = new JLabel ("Coins: 0");
 	
 	public ProjectMain() {
 		setBounds(100, 100, 1000, 500);
@@ -58,6 +59,8 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 		gameOverScreen.setBounds(0, 0, getWidth(), getHeight());
 		gameOverScreen.setFont(new Font("Serif", Font. BOLD, 80));
 		gameOverScreen.setVisible(false);
+		coinCounter.setBounds(0, 0, 100, 100);
+		add(coinCounter);
 		add(gameOverScreen);
 		//objects.add(block);
 		
@@ -186,6 +189,7 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 			o.update(objects);
 		}
 		Coin.updateCoinFrame();
+		coinCounter.setText("Coins: " + Coin.getCoins());
 		frame++;
 		
 	}
