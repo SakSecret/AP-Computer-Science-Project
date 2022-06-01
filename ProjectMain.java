@@ -20,6 +20,7 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 	 * just slightly move the new sprite, one pixel will do
 	 */
 	private Timer t = new Timer(20, this);
+	private JLabel background = new JLabel();
 	private Player player;
 	private Platform platform;
 	//private Block block;
@@ -44,6 +45,15 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 		screenX = 0;
 		screenY = 0;
 		scrolling = true;
+		background.setSize(getWidth(), getHeight());
+		try {
+			File test = new File("src/misc/background.jpg");
+			background.setIcon(new ImageIcon(ImageIO.read(test)));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//add(background);
 		player = new Player(100, 100);
 		platform = new Platform(200, 400);
 		//block = new Block(300, 300);
@@ -51,8 +61,14 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 		objects.add(platform);
 		objects.add(new Platform(100, 400));
 		for (int i = 0; i < 1000; i++) {
-			objects.add(new Platform(i*80, 400));
-			objects.add(new Coin(i*100, 200));
+			//objects.add(new Platform(i*80, 150));
+			//objects.add(new Coin(i*100, 200));
+			objects.add(new Block(i * 100, 100));
+		}
+		
+		for (int i = 0; i < 1000; i++) {
+			objects.add(new Platform(i*300, (int)(Math.random() * 200) + 200));
+			objects.add(new Platform(80*i, 400));
 		}
 		objects.add(new Platform(300, 200));
 		objects.add(new Goomba(400, 300));
@@ -146,18 +162,13 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 		//	}
 			//setLocation((int)(Math.random() * 600), (int)(Math.random() * 600));
 			int vel = player.getdx(); //limit function calls as player velocity could change during code execution
-			if (cameraSide == 1 && player.getdx() < 0) {
+			if ((cameraSide == 1 && player.getdx() < 0) || (cameraSide == 0 && player.getdx() > 0)) {
 				for (GameObject o: objects) {
 					o.scroll(-vel);
 				}
+				offset += vel;
 			}
-			else if (cameraSide == 0 && player.getdx() > 0) {
-				for (GameObject o: objects) {
-					o.scroll(-vel);
-				}
-			}
-			offset += vel;
-			if (frame%30 == 0) {
+			if (frame%2 == 0) {
 				platform.setLocation(player.getX(), platform.getY());
 			}
 		}
@@ -178,9 +189,18 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 				gameOverScreen.setVisible(true);
 			}
 			for (int i = 0; i < objects.size(); i++) { //wtf is this idk, remove later if causes problems
-				if (!objects.get(i).isVisible() && objects.get(i) instanceof Enemy) {
+				if (!objects.get(i).hasCollisions() && objects.get(i) instanceof Enemy) {
+					objects.get(i).setVisible(false);
+					objects.get(i).setLocation(getX() + 1, getY());
+					remove(objects.get(i));
 					objects.remove(i);
 					i--; //if something goes wrong, check this
+				}
+			}
+			for (int i = 0; i < objects.size(); i++) {
+				if (objects.get(i).getX() < -100) {
+					objects.remove(i);
+					i--;
 				}
 			}
 		}
@@ -197,6 +217,7 @@ public class ProjectMain extends JFrame implements ActionListener, KeyListener {
 	public void scroll(int xVal, int yVal) { { //scrolls the screen slowly to the designated x and y
 		
 	}
+	
 	
 
 }
