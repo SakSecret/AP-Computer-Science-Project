@@ -12,7 +12,7 @@ public class Player extends GameObject{
 	private BufferedImage myPicture;
 	private boolean airborne = false;
 	private Insets insets;
-	private final int MAX_VELOCITY = 10;
+	private final int MAX_VELOCITY = 40;
 	private final int TERMINAL_VELOCITY = 10;
 	private int runFrame = 0;
 	private BufferedImage[] sprites;
@@ -64,6 +64,17 @@ public class Player extends GameObject{
 							airborne = false;
 							setLocation(getX(), list.get(i).getY() - getHeight() + 1);
 						}
+
+					}
+					else if (getdy() < 3) {
+							setdy(0);
+							setLocation(getX(), list.get(i).getY() + list.get(i).getHeight());
+							if (obj instanceof Block) { 
+								((Block)obj).destroy();
+							}
+					}
+					else {
+						setdx(0);
 					}
 					
 				}
@@ -118,7 +129,7 @@ public class Player extends GameObject{
 	}
 	
 	public void accelerate(int x, int y) {
-		if ((Math.abs(getdx()) <= Math.abs(MAX_VELOCITY))) {
+		if ((Math.abs(getdx() + x) <= Math.abs(MAX_VELOCITY))) {
 			changedx(x);
 		}
 		if (!(getdy() > TERMINAL_VELOCITY)) {
